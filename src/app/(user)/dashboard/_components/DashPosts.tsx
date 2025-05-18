@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React from 'react';
 import {
@@ -11,7 +12,7 @@ import {
 import  Image  from 'next/image';
 
 
-
+/*
 const posts = [
   {
     id: 1,
@@ -66,13 +67,12 @@ const posts = [
     }
   }
 ];
+*/
 
-
-function DashPosts() {
+function DashPosts({posts}:{posts: any[]}) {
   return (
     <div className='flex w-full flex-col items-center justify-between py-3'>
       {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         posts.map((post: any) => (
             <div key={post.id} className='flex flex-col justify-center md:w-3xl w-md px-5 max-w-3xl py-5'>
                 <Card>
@@ -91,7 +91,7 @@ function DashPosts() {
                         }).replace(/ /g, "-")}
                     </CardContent>
                     <CardFooter>
-                        <p>~ {post.author.name}</p>
+                        <p>~ {post.author.username}</p>
                     </CardFooter>
                 </Card>
 

@@ -1,11 +1,13 @@
 import React from 'react'
 import DashPosts from './_components/DashPosts';
+import { getAllPosts } from '../../../../actions/posts';
 
 
-function page() {
+async function page() {
+  const posts = await getAllPosts();
   return (
     <div>
-      <DashPosts/>
+      <DashPosts posts={posts}/>
     </div>
   )
 }

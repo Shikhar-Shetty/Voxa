@@ -2,12 +2,15 @@
 "use server";
 import prisma from "../lib/prisma";
 
-export const addPost = async(id: string, posts: any) => {
+export const addPost = async (id: string, posts: any) => {
     try {
         const newPost = await prisma.post.create({
             data: {
                 ...posts,
                 authorId: id,
+            },
+            include: {
+                author: true
             }
         })
         console.log(newPost);
@@ -18,7 +21,7 @@ export const addPost = async(id: string, posts: any) => {
     }
 }
 
-export const updatePost = async(postId: number, userId: string, title: string, description: string) => {
+export const updatePost = async (postId: number, userId: string, title: string, description: string) => {
     try {
         const userPost = await prisma.post.findFirst({
             where: {
@@ -27,7 +30,7 @@ export const updatePost = async(postId: number, userId: string, title: string, d
             }
         })
         console.log(userPost);
-        if(!userPost){
+        if (!userPost) {
             throw new Error("Error Fetching User Post");
         }
         const updatedPost = await prisma.post.update({
@@ -39,7 +42,7 @@ export const updatePost = async(postId: number, userId: string, title: string, d
                 description
             }
         })
-        console.log(updatedPost);        
+        console.log(updatedPost);
         return updatedPost;
     } catch (error) {
         console.log("Error updating Post", error);
@@ -47,7 +50,7 @@ export const updatePost = async(postId: number, userId: string, title: string, d
     }
 }
 
-export const deletePost = async(postId: number, userId: string) => {
+export const deletePost = async (postId: number, userId: string) => {
     try {
         const userPost = await prisma.post.findFirst({
             where: {
@@ -55,7 +58,7 @@ export const deletePost = async(postId: number, userId: string) => {
                 authorId: userId
             }
         })
-        if(!userPost){
+        if (!userPost) {
             console.log("No Post found");
             throw new Error("Invalid Post, cannot delete");
         }
@@ -72,11 +75,14 @@ export const deletePost = async(postId: number, userId: string) => {
     }
 }
 
-export const getAllUserPosts = async(userId: string) => {
+export const getAllUserPosts = async (userId: string) => {
     try {
         const userPosts = await prisma.post.findMany({
             where: {
                 authorId: userId
+            },
+            include: {
+                author: true
             }
         });
         console.log(userPosts);
@@ -87,9 +93,22 @@ export const getAllUserPosts = async(userId: string) => {
     }
 }
 
-export const getAllPosts = async() => {
+export const getAllPosts = async () => {
     try {
-        const allPosts = await prisma.post.findMany();
+        const allPosts = await prisma.post.findMany({
+            orderBy: {
+                createdAt: "desc",
+            },
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        email: true,
+                        username: true, 
+                    }
+                }
+            }
+        });
         console.log(allPosts);
         return allPosts;
     } catch (error) {

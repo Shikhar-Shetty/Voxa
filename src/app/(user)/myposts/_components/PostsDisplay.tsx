@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from 'react'
@@ -16,7 +17,9 @@ import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { addPost, deletePost, updatePost } from '../../../../../actions/posts';
 
+/*
 const posts = [
     {
         id: 1,
@@ -71,39 +74,80 @@ const posts = [
         }
     }
 ];
+*/
 
+interface UserPosts{
+    title: string;
+    id: number;
+    description: string;
+    createdAt: Date;
+    updatedAt: Date;
+    authorId: string;
+    author:{
+        username: string
+    }
+};
 
-function PostsDisplay() {
+function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
     const [editModeId, setEditModeId] = useState<number | null>(null);
-    const [addPost, setAddPost] = useState(false);
-    const [post, setPost] = useState(posts);
+    const [showAddPost, setShowAddPost] = useState(false);
+    const [post, setPost] = useState<UserPosts[]>(posts);
+    const [currentPost, setCurrentPost] = useState({
+        title: "",
+        description: "",
+    });
 
-    const handleAdd = (newPost) => {
 
+    const handleAdd = async(id: string, newPost:{title:string, description: string}) => {
+        try {
+            const res = await addPost(id, newPost);
+            console.log(res);
+            setPost(prev => [...prev, res]);
+            setCurrentPost({title: "", description: ""})
+        } catch (error) {
+            console.log("Error While adding the Post");
+            throw new Error("Error Handling Add Post");
+        }
     };
 
-    const handleEdit = (id, updatedPost) => {
-
+    const handleEdit = async(postId: number,id: string,  updatedPost: {title: string, description: string}) => {
+        try {
+            const res = await updatePost(postId, id, updatedPost.title, updatedPost.description);
+            console.log(res);
+            setPost(prev =>
+                prev.map(p => p.id === postId ? { ...p, ...updatedPost, updatedAt: new Date() } : p)
+            );
+        setCurrentPost({ title: "", description: "" });
+        } catch (error) {
+            console.log("Error updating Post", error);
+            throw new Error("Error while Updating the Post");
+        }
     }
 
-    const handleDelete = (id) => {
-
+    const handleDelete = async(id: number, userId: string) => {
+        try {
+            await deletePost(id, userId);
+            setPost(prev => prev.filter(p => p.id !== id)); 
+        } catch (error) {
+            console.log("Error deleting Post", error);
+            throw new Error("Error while deleting the Post");
+        }
     }
 
     return (
-        <div className='flex flex-col w-full  items-center '>
-            <div className="flex flex-row w-full max-w-3xl rounded-md p-4 bg-neutral-900 justify-between">
+        <div className='flex flex-col w-full items-center '>
+            <div className="flex flex-row w-full max-w-3xl rounded-md p-4 bg-white text-black dark:text-white dark:bg-neutral-900 justify-between">
                 <div>User Posts</div>
 
                 <div onClick={() => {
-                    setAddPost(true);
+                    setShowAddPost(true);
                     setEditModeId(null);
                 }} className='border cursor-pointer rounded-sm'>
-                    <Plus />
+                    <Plus className='dark:text-gray-200 text-black'/>
                 </div>
             </div>
 
-            {addPost && (
+            {showAddPost && (
                 <div className='flex flex-col justify-center w-full max-w-3xl py-5'>
                     <Card>
                         <div className='items-center flex flex-row'>
@@ -112,26 +156,34 @@ function PostsDisplay() {
                                     <div className="space-y-2">
                                         <Label htmlFor='title'>Title</Label>
                                         <Input
-                                        id="title"
+                                            id="title"
                                             placeholder='Title'
-                                            defaultValue={" "}
+                                            value={currentPost.title}
+                                            onChange={(e) => setCurrentPost({...currentPost, title: e.target.value})}
                                             className="bg-neutral-800 text-white p-2 mb-3 rounded w-full"
                                         />
                                         <Label htmlFor="text">Post Description</Label>
                                         <Textarea
                                             id="text"
-                                            placeholder='Title'
-                                            defaultValue={" "}
+                                            placeholder='Description'
+                                            value={currentPost.description}
+                                            onChange={(e) => setCurrentPost({...currentPost, description: e.target.value})}
                                             className="bg-neutral-800 text-white p-2 rounded w-full"
                                         />
                                         <div className='flex justify-between'>
                                             <button
                                                 className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white cursor-pointer rounded"
-                                                onClick={() => setAddPost(false)}
+                                                onClick={() => {
+                                                    handleAdd(userId,currentPost)
+                                                    setShowAddPost(false)
+                                                }}
                                             >
                                                 Save
                                             </button>
-                                            <button onClick={() => setAddPost(false)} className='bg-red-600 px-3 rounded hover:bg-red-700 text-white cursor-pointer'>Cancel</button>
+                                            <button onClick={() => {
+                                                setShowAddPost(false)
+                                                setCurrentPost({ title: "", description: "" });
+                                                }} className='bg-red-600 px-3 rounded hover:bg-red-700 text-white cursor-pointer'>Cancel</button>
                                         </div>
 
                                     </div>
@@ -143,8 +195,7 @@ function PostsDisplay() {
             )}
             <div className='flex w-full flex-col justify-center items-center'>
                 {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    posts.map((post: any) => (
+                    post.map((post: any) => (
                         <div key={post.id} className='flex flex-col justify-center w-full max-w-3xl py-5'>
                             <Card>
                                 <div className='items-center flex flex-row'>
@@ -153,23 +204,29 @@ function PostsDisplay() {
                                             {editModeId === post.id ? (
                                                 <div className="space-y-2">
                                                     <input
-                                                        defaultValue={post.title}
+                                                        value={currentPost.title}
+                                                        onChange={(e) => setCurrentPost({...currentPost, title: e.target.value})}
                                                         className="bg-neutral-800 text-white p-2 rounded w-full"
                                                     />
                                                     <textarea
-                                                        defaultValue={post.description}
+                                                        value={currentPost.description}
+                                                        onChange={(e) => setCurrentPost({...currentPost, description: e.target.value})}
                                                         className="bg-neutral-800 text-white p-2 rounded w-full"
                                                     />
                                                     <div className='flex justify-between'>
                                                         <button
                                                             className="px-3 py-1 bg-green-600 text-white cursor-pointer rounded"
                                                             onClick={() => {
+                                                                handleEdit(post.id, userId, currentPost)
                                                                 setEditModeId(null)
                                                             }}
                                                         >
                                                             Save
                                                         </button>
-                                                        <button onClick={() => setEditModeId(null)} className='bg-red-600 px-3 rounded hover:bg-red-700 cursor-pointer text-white'>Cancel</button>
+                                                        <button onClick={() => {
+                                                            setEditModeId(null)
+                                                            setCurrentPost({ title: "", description: "" })
+                                                        }} className='bg-red-600 px-3 rounded hover:bg-red-700 cursor-pointer text-white'>Cancel</button>
                                                     </div>
 
                                                 </div>
@@ -185,12 +242,14 @@ function PostsDisplay() {
                                         <div></div>
                                     ) : (
                                         <div className='flex'>
-                                            <div className='text-red-900 cursor-pointer'>
+                                            <div
+                                                onClick={() => {handleDelete(post.id, userId)                                                }}
+                                                className='text-red-900 cursor-pointer'>
                                                 <Trash2 className='w-6' />
                                             </div>
                                             <div onClick={() => {
                                                 setEditModeId(post.id)
-                                                setAddPost(false)
+                                                setShowAddPost(false)
                                             }} className='px-5 cursor-pointer'>
                                                 <Pencil className='w-5' />
                                             </div>
@@ -200,7 +259,8 @@ function PostsDisplay() {
                                 </div>
 
                                 <div>
-                                    <Image width={200} height={200} src="/blog-icon.png" alt="Nope" />
+                                    <Image width={200} height={200} src="/blog-icon.png"  alt={post.title || "Blog Image"}
+                                        onError={(e) => (e.currentTarget.style.display = "none")} />
                                 </div>
                                 <CardContent>
                                     {post.createdAt.toLocaleDateString("en-GB", {
@@ -210,7 +270,7 @@ function PostsDisplay() {
                                     }).replace(/ /g, "-")}
                                 </CardContent>
                                 <CardFooter>
-                                    <p>~ {post.author.name}</p>
+                                    <p>~ {post.author.username || "Unknown Author"}</p>
                                 </CardFooter>
                             </Card>
 
