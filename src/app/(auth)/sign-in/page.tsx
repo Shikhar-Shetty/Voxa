@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
+
 
 const SignIn = () => {
   const router = useRouter();
@@ -78,6 +80,9 @@ const SignIn = () => {
               </FormItem>
             )}
           />
+          <div>Don&apos;t have an account? {" "}
+            <Link href={"/sign-up"} className='text-blue-400'>Sign Up</Link>
+          </div>
           <Button type="submit">Submit</Button>
         </form>
       </Form>

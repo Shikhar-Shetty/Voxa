@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const SignUp = () => {
   const router = useRouter();
@@ -90,6 +91,9 @@ const SignUp = () => {
               </FormItem>
             )}
           />
+          <div>Already have an Account? {" "}
+            <Link href={"/sign-in"} className='text-blue-400'>Sign In</Link>
+          </div>
           <Button type="submit">Submit</Button>
         </form>
       </Form>
