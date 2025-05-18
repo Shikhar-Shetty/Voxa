@@ -1,9 +1,11 @@
 import React from 'react'
+import DashPosts from './_components/DashPosts';
+
 
 function page() {
   return (
     <div>
-      My DashBoard
+      <DashPosts/>
     </div>
   )
 }
