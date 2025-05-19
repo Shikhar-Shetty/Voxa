@@ -2,11 +2,12 @@
 "use server";
 import prisma from "../lib/prisma";
 
-export const addPost = async (id: string, posts: any) => {
+export const addPost = async (id: string, posts: any, image: string) => {
     try {
         const newPost = await prisma.post.create({
             data: {
                 ...posts,
+                image,
                 authorId: id,
             },
             include: {
@@ -28,7 +29,8 @@ export const updatePost = async (postId: number, userId: string, title: string, 
                 id: postId,
                 authorId: userId
             }
-        })
+        });
+
         console.log(userPost);
         if (!userPost) {
             throw new Error("Error Fetching User Post");

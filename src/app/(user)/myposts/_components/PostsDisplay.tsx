@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from 'react'
@@ -18,68 +17,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { addPost, deletePost, updatePost } from '../../../../../actions/posts';
+import UploadForm from '../../../../components/UploadForm';
 
-/*
-const posts = [
-    {
-        id: 1,
-        title: "Mastering TypeScript with Prisma",
-        description: "A complete guide to using Prisma with TypeScript in full-stack apps.",
-        createdAt: new Date("2025-05-01T10:00:00Z"),
-        updatedAt: new Date("2025-05-01T10:00:00Z"),
-        authorId: "user_abc123",
-        author: {
-            id: "user_abc123",
-            name: "Alice",
-            email: "alice@example.com",
-        }
-    },
-    {
-        id: 2,
-        title: "Building a Blog API with Next.js and PostgreSQL",
-        description: "Learn how to set up a production-ready blog API using Next.js, Prisma, and PostgreSQL.",
-        createdAt: new Date("2025-05-10T14:30:00Z"),
-        updatedAt: new Date("2025-05-10T16:00:00Z"),
-        authorId: "user_xyz789",
-        author: {
-            id: "user_xyz789",
-            name: "Bob",
-            email: "bob@example.com",
-        }
-    },
-    {
-        id: 3,
-        title: "Building a Blog API with Next.js and PostgreSQL",
-        description: "Learn how to set up a production-ready blog API using Next.js, Prisma, and PostgreSQL.",
-        createdAt: new Date("2025-05-10T14:30:00Z"),
-        updatedAt: new Date("2025-05-10T16:00:00Z"),
-        authorId: "user_xyz789",
-        author: {
-            id: "user_xyz789",
-            name: "Bob",
-            email: "bob@example.com",
-        }
-    },
-    {
-        id: 4,
-        title: "Building a Blog API with Next.js and PostgreSQL",
-        description: "Learn how to set up a production-ready blog API using Next.js, Prisma, and PostgreSQL.",
-        createdAt: new Date("2025-05-10T14:30:00Z"),
-        updatedAt: new Date("2025-05-10T16:00:00Z"),
-        authorId: "user_xyz789",
-        author: {
-            id: "user_xyz789",
-            name: "Bob",
-            email: "bob@example.com",
-        }
-    }
-];
-*/
 
 interface UserPosts{
     title: string;
     id: number;
     description: string;
+    image: string;
     createdAt: Date;
     updatedAt: Date;
     authorId: string;
@@ -98,9 +43,9 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
     });
 
 
-    const handleAdd = async(id: string, newPost:{title:string, description: string}) => {
+    const handleAdd = async(id: string, newPost:{title:string, description: string, image: string}) => {
         try {
-            const res = await addPost(id, newPost);
+            const res = await addPost(id, newPost, image);
             console.log(res);
             setPost(prev => [...prev, res]);
             setCurrentPost({title: "", description: ""})
@@ -170,11 +115,12 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
                                             onChange={(e) => setCurrentPost({...currentPost, description: e.target.value})}
                                             className="bg-neutral-800 text-white p-2 rounded w-full"
                                         />
+                                        <UploadForm/>
                                         <div className='flex justify-between'>
                                             <button
                                                 className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white cursor-pointer rounded"
                                                 onClick={() => {
-                                                    handleAdd(userId,currentPost)
+                                                    handleAdd(userId,currentPost, image);
                                                     setShowAddPost(false)
                                                 }}
                                             >
@@ -195,7 +141,7 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
             )}
             <div className='flex w-full flex-col justify-center items-center'>
                 {
-                    post.map((post: any) => (
+                    post.map((post: UserPosts) => (
                         <div key={post.id} className='flex flex-col justify-center w-full max-w-3xl py-5'>
                             <Card>
                                 <div className='items-center flex flex-row'>
@@ -249,7 +195,12 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
                                             </div>
                                             <div onClick={() => {
                                                 setEditModeId(post.id)
-                                                setShowAddPost(false)
+                                                setCurrentPost({
+                                                    title: post.title,
+                                                    description: post.description
+                                                });
+                                                setShowAddPost(false);
+
                                             }} className='px-5 cursor-pointer'>
                                                 <Pencil className='w-5' />
                                             </div>
