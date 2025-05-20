@@ -23,14 +23,16 @@ const Header = () => {
   return (
     <div className='p-3 flex justify-between'>
       <div className='flex flex-row'>
-        <div className="avatar">
-          <div className="w-8 bg-white rounded-full">
+        <div className="avatar py-[3px]">
+          <div className="w-8 border border-gray-400 bg-white rounded-full">
             <Link href={"/dashboard"}>
-              <Image width={80} height={80} src={"/blog-icon.png"} alt='no' />
+              <Image width={80} height={80} src={"/blog-new.png"} className='rounded-full' alt='no' />
             </Link>
           </div>
         </div>
-        <p className='pl-2 pt-1 text-xl font-semibold'>Voxa</p>
+        <Link href={"/dashboard"}>
+          <p className='pl-2 pt-1 text-xl font-semibold'>Voxa</p>
+        </Link>
       </div>
       <div className='flex gap-2'>
         <Link href={"/dashboard"}>

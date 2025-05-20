@@ -24,7 +24,7 @@ interface UserPosts{
     title: string;
     id: number;
     description: string;
-    image: string;
+    image?: string;
     createdAt: Date;
     updatedAt: Date;
     authorId: string;
@@ -41,24 +41,32 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
         title: "",
         description: "",
     });
+    const [image, setImage] = useState<string>("");
 
 
-    const handleAdd = async(id: string, newPost:{title:string, description: string, image: string}) => {
+    const handleAdd = async(id: string, newPost:{title:string, description: string}, image: string) => {
         try {
             const res = await addPost(id, newPost, image);
-            console.log(res);
-            setPost(prev => [...prev, res]);
-            setCurrentPost({title: "", description: ""})
+
+        const formattedPost: UserPosts = {
+            ...res,
+            author: {
+                username: res.author.username,
+            },
+            image,
+        };
+
+        setPost(prev => [...prev, formattedPost]);  
+        setCurrentPost({title: "", description: ""})
+        
         } catch (error) {
             console.log("Error While adding the Post");
-            throw new Error("Error Handling Add Post");
         }
     };
 
     const handleEdit = async(postId: number,id: string,  updatedPost: {title: string, description: string}) => {
         try {
             const res = await updatePost(postId, id, updatedPost.title, updatedPost.description);
-            console.log(res);
             setPost(prev =>
                 prev.map(p => p.id === postId ? { ...p, ...updatedPost, updatedAt: new Date() } : p)
             );
@@ -115,12 +123,12 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
                                             onChange={(e) => setCurrentPost({...currentPost, description: e.target.value})}
                                             className="bg-neutral-800 text-white p-2 rounded w-full"
                                         />
-                                        <UploadForm/>
+                                        <UploadForm setImage={setImage}/>
                                         <div className='flex justify-between'>
                                             <button
                                                 className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white cursor-pointer rounded"
                                                 onClick={() => {
-                                                    handleAdd(userId,currentPost, image);
+                                                    handleAdd(userId, currentPost, image);
                                                     setShowAddPost(false)
                                                 }}
                                             >
@@ -209,8 +217,8 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
 
                                 </div>
 
-                                <div>
-                                    <Image width={200} height={200} src="/blog-icon.png"  alt={post.title || "Blog Image"}
+                                <div className='px-5'>
+                                    <Image width={200} height={200} src={`${post.image}`} className='rounded-sm' alt={post.title || "Blog Image"}
                                         onError={(e) => (e.currentTarget.style.display = "none")} />
                                 </div>
                                 <CardContent>
@@ -221,7 +229,7 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
                                     }).replace(/ /g, "-")}
                                 </CardContent>
                                 <CardFooter>
-                                    <p>~ {post.author.username || "Unknown Author"}</p>
+                                    <p className='border rounded-lg p-2'>~ {post.author.username || "Unknown Author"}</p>
                                 </CardFooter>
                             </Card>
 

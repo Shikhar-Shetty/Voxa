@@ -8,7 +8,6 @@ export async function middleware(request: NextRequest) {
   });
 
   const url = request.nextUrl.clone();
-  console.log("Middleware Token:", token);
   if(!token) console.log("No token");
   
 
@@ -16,7 +15,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-
+  if(url.pathname === "/"){
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+  
   if ((url.pathname.startsWith("/sign-in") || url.pathname.startsWith("/sign-up")) && token) {
     return NextResponse.redirect(new URL("/", request.url));
   }

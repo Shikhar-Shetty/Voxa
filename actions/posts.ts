@@ -14,7 +14,6 @@ export const addPost = async (id: string, posts: any, image: string) => {
                 author: true
             }
         })
-        console.log(newPost);
         return newPost;
     } catch (error) {
         console.log("Error:", error);
@@ -44,7 +43,6 @@ export const updatePost = async (postId: number, userId: string, title: string, 
                 description
             }
         })
-        console.log(updatedPost);
         return updatedPost;
     } catch (error) {
         console.log("Error updating Post", error);
@@ -69,7 +67,6 @@ export const deletePost = async (postId: number, userId: string) => {
                 id: postId
             }
         })
-        console.log(deletedPost);
         return deletedPost;
     } catch (error) {
         console.log("Error Removing Post", error);
@@ -87,7 +84,6 @@ export const getAllUserPosts = async (userId: string) => {
                 author: true
             }
         });
-        console.log(userPosts);
         return userPosts;
     } catch (error) {
         console.log("Error Fetching User Posts", error);
@@ -111,7 +107,6 @@ export const getAllPosts = async () => {
                 }
             }
         });
-        console.log(allPosts);
         return allPosts;
     } catch (error) {
         console.log("Error Displaying", error);

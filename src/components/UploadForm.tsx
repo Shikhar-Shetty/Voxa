@@ -5,12 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Image from "next/image";
 
-export default function UploadForm() {
+export default function UploadForm({ setImage }: { setImage: (url: string) => void }) {
     const [file, setFile] = useState<File | null>(null);
-        const [imageUrl, setImageUrl] = useState<string>("");
+    const [previewUrl, setPreviewUrl] = useState<string>("");
 
     const handleImageUpload = async () => {
-        if(!file) return;
+        if (!file) return;
 
         const formData = new FormData();
         formData.append("file", file);
@@ -18,27 +18,26 @@ export default function UploadForm() {
         const res = await fetch('/api/upload', {
             method: 'POST',
             body: formData,
-        })
+        });
 
         const data = await res.json();
         console.log('Uploaded File:', data.fileUrl);
 
-        setImageUrl(data.fileUrl);
-    }
+        setPreviewUrl(data.fileUrl);
+        setImage(data.fileUrl); 
+    };
 
-
-  return (
-        <div className="p-4 space-y-4 max-w-md mx-auto border rounded-lg">
+    return (
+        <div className="p-2 space-y-2 border rounded-md">
             <Input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
             <Button onClick={handleImageUpload}>Upload Image</Button>
 
-            {imageUrl && (
-                <div className="mt-4 space-y-2">
+            {previewUrl && (
+                <div className="mt-2">
                     <p className="text-sm text-green-600">Image uploaded successfully:</p>
-                    <Image src={imageUrl} alt="Uploaded Preview" className="w-full h-auto rounded-md" />
+                    <Image src={previewUrl} alt="Uploaded Preview" width={200} height={200} className="rounded-md" />
                 </div>
             )}
         </div>
     );
-
 }
