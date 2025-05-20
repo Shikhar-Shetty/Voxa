@@ -1,6 +1,6 @@
 # Voxa 🗣️
 
-Voxa is a modern, full-stack **Post Sharing Platform** built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **MongoDB**, and **Prisma ORM**. It allows users to authenticate, create, edit, and share their thoughts as posts, and explore content shared by others.
+Voxa is a modern, full-stack **Post Sharing Platform** built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **PostgreSql**, and **Prisma ORM**. It allows users to authenticate, create, edit, and share their thoughts as posts, and explore content shared by others.
 
 ---
 
@@ -11,7 +11,7 @@ Voxa is a modern, full-stack **Post Sharing Platform** built with **Next.js 14 (
 - 📝 Create, edit, and delete **Posts**
 - 👥 User profiles and dashboards
 - ⚡ Server Actions & API Routes (App Router)
-- 💾 MongoDB & Prisma ORM integration
+- 💾 PostgreSql & Prisma ORM integration
 - 📄 Post metadata and structured content
 - 🧱 Type-safe code with Zod + React Hook Form
 - 📱 Mobile-first, fully responsive design
@@ -53,7 +53,7 @@ npm install
 ### 3. Setup Environmental Variables
 
 ```bash
-DATABASE_URL=your_postgresSql_connection_string
+DATABASE_URL=your_postgreSql_connection_string
 NEXTAUTH_SECRET=your_auth_secret
 NEXTAUTH_URL=http://localhost:3000
 ```
@@ -75,7 +75,7 @@ npm run dev
 
 ## 🔗 Connect
 
-Made by [](https://github.com/Shikhar-Shetty)
+Made by [Shikhar-Shetty](https://github.com/Shikhar-Shetty)
 Personal Project
 ---
 
