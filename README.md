@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Voxa 🗣️
 
-## Getting Started
+Voxa is a modern, full-stack **Post Sharing Platform** built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **MongoDB**, and **Prisma ORM**. It allows users to authenticate, create, edit, and share their thoughts as posts, and explore content shared by others.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+- ✨ Beautiful, responsive UI built with Tailwind CSS
+- 🔒 Authentication with **NextAuth.js**
+- 📝 Create, edit, and delete **Posts**
+- 👥 User profiles and dashboards
+- ⚡ Server Actions & API Routes (App Router)
+- 💾 MongoDB & Prisma ORM integration
+- 📄 Post metadata and structured content
+- 🧱 Type-safe code with Zod + React Hook Form
+- 📱 Mobile-first, fully responsive design
+
+---
+
+## 🧱 Tech Stack
+
+| Layer           | Tech Used                            |
+|----------------|---------------------------------------|
+| Framework       | [Next.js 14](https://nextjs.org)     |
+| Language        | TypeScript                           |
+| Styling         | Tailwind CSS                         |
+| Backend         | App Router + Server Actions          |
+| Database        | PostgreSql                           |
+| ORM             | Prisma                               |
+| Auth            | NextAuth.js                          |
+| Validation      | Zod + React Hook Form                |
+| Hosting         | Vercel / Render                      |
+
+---
+
+
+## 📦 Getting Started
+
+### 1. Clone the Repo
+
+```bash
+git clone https://github.com/your-username/voxa.git
+cd voxa
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install 
+```
+
+### 3. Setup Environmental Variables
+
+```bash
+DATABASE_URL=your_postgresSql_connection_string
+NEXTAUTH_SECRET=your_auth_secret
+NEXTAUTH_URL=http://localhost:3000
+```
+
+### 4. Push Prisma Schema
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+### 5. Run the Aoolication
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔗 Connect
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Made by [](https://github.com/Shikhar-Shetty)
+Personal Project
+---
 
-## Learn More
+## 🚧 Project Scope
 
-To learn more about Next.js, take a look at the following resources:
+Voxa is a **complete standalone project**, built to demonstrate full-stack development using Next.js App Router, Prisma, and MongoDB. It’s ideal for learning, portfolio showcasing, or bootstrapping your own post-sharing platform.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🫡 Thank you for checking out Voxa...
