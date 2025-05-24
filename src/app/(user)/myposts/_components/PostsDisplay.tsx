@@ -24,7 +24,7 @@ interface UserPosts{
     title: string;
     id: number;
     description: string;
-    image?: string;
+    image?: string | null;
     createdAt: Date;
     updatedAt: Date;
     authorId: string;
