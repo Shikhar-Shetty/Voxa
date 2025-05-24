@@ -4,6 +4,8 @@ import { getAllUserPosts } from '../../../../actions/posts';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 
+export const dynamic = "force-dynamic";
+
 async function page() {
   const user = await getServerSession(authOptions)
   console.log(user);

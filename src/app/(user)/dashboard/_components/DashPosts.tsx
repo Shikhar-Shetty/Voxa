@@ -24,7 +24,7 @@ function DashPosts({posts}:{posts: any[]}) {
                         <CardDescription>{post.description}</CardDescription>
                     </CardHeader>
                         <div className='rounded px-5'>
-                            <Image width={270} height={250} src={post.image} className='rounded-sm transition duration-300 md:w-[250px]' alt="Nope"/>
+                            <Image width={270} height={250} src={post.image} className='rounded-sm transition duration-300 md:w-[250px]' alt="Nope" unoptimized/>
                         </div>
                     <CardContent>
                         {post.createdAt.toLocaleDateString("en-GB", {

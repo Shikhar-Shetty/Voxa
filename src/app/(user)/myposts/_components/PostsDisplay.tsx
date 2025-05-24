@@ -219,7 +219,7 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
 
                                 <div className='px-5'>
                                     <Image width={200} height={200} src={`${post.image}`} className='rounded-sm' alt={post.title || "Blog Image"}
-                                        onError={(e) => (e.currentTarget.style.display = "none")} />
+                                        onError={(e) => (e.currentTarget.style.display = "none")} unoptimized/>
                                 </div>
                                 <CardContent>
                                     {post.createdAt.toLocaleDateString("en-GB", {
