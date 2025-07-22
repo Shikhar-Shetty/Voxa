@@ -70,6 +70,7 @@ function PostsDisplay({posts, userId}:{posts:UserPosts[]; userId: string}) {
             setPost(prev =>
                 prev.map(p => p.id === postId ? { ...p, ...updatedPost, updatedAt: new Date() } : p)
             );
+            console.log(res);
         setCurrentPost({ title: "", description: "" });
         } catch (error) {
             console.log("Error updating Post", error);
